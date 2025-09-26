@@ -74,3 +74,27 @@ def top_features_for_target(t_qid, k=10):
         'score', ascending=False
     )['feature'].head(k).tolist()
     return feats
+```
+:::
+::::
+
+## Step 2: The Two-Step LLM Pipeline
+
+Instead of a single, massive prompt, we adopted a more effective two-step approach.
+
+::::: columns
+::: {.column width="50%"}
+### **Call 1: Persona Generation**
+
+-   **Input:** The respondent's answers to the Top 10 most important feature questions.
+-   **Task:** Ask the LLM to synthesize this information into a concise, narrative psychological profile (a "persona").
+-   **Output:** A 100-150 word paragraph describing the respondent's likely values and attitudes.
+:::
+::: {.column width="50%"}
+### **Call 2: Target Prediction**
+
+-   **Input:** The newly generated persona + the target question and its possible answers.
+-   **Task:** Ask the LLM to act as that persona and choose the most likely answer.
+-   **Output:** A single, verbatim answer (e.g., "Agree").
+:::
+:::::
