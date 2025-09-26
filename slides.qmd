@@ -1,0 +1,63 @@
+---
+title: "Predicting Survey Answers with LLMs"
+subtitle: "A Prompt Engineering Journey"
+author:
+  - name: "Project Synthesis"
+format:
+  revealjs:
+    theme: simple
+    transition: fade
+    auto-stretch: false
+    width: 1250
+    height: 760
+    chalkboard: true
+execute:
+  echo: false
+---
+
+## The Core Challenge
+
+**Goal:** Predict a respondent's answer to a *target question* based on their answers to hundreds of other *feature questions*.
+
+::::: columns
+::: {.column width="60%"}
+-   **Input:** ~200+ answers from a single respondent (World Values Survey).
+-   **Output:** A plausible prediction for a specific target question (e.g., `t_Q29`).
+-   **Problem:** How do we provide the right context to a Large Language Model (LLM) without overwhelming it with irrelevant information ("noise")?
+:::
+::: {.column width="40%"}
+![](https://images.unsplash.com/photo-1599658880436-c61792e70672?q=80&w=2070&auto=format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
+:::
+:::::
+
+## Step 1: Finding the Signal (Feature Importance)
+
+We can't use all 200+ questions. We need to select the few that are most predictive for each target.
+
+::::: columns
+::: {.column width="50%"}
+An R script was used to pre-calculate the statistical association between every feature and every target.
+
+**Key Metrics Used:**
+-   Mutual Information (MI)
+-   Cramér's V
+-   Theil's U (asymmetric)
+-   A final composite **`score`**
+
+$$U(Y|X) = \frac{H(Y) - H(Y|X)}{H(Y)}$$
+
+:::
+::: {.column width="50%"}
+This process generated a `rank_all_questions.csv` file, allowing us to programmatically select the `TOP_K_FEATURES` for any given target.
+
+```python
+def top_features_for_target(t_qid, k=10):
+    """
+    Selects the top k features for a target
+    based on the pre-calculated 'score'.
+    """
+    sub = rank[rank['target'] == t_qid]
+    feats = sub.sort_values(
+        'score', ascending=False
+    )['feature'].head(k).tolist()
+    return feats
