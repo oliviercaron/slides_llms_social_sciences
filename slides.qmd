@@ -1,8 +1,21 @@
 ---
 title: "Predicting Survey Answers with LLMs"
-subtitle: "A Prompt Engineering Journey"
+subtitle: "LLMs for Social Sciences"
 author:
-  - name: "Project Synthesis"
+  - name: "Basak Bozkurt"
+    affiliations: ""
+  - name: "Fanqi Zeng"
+    affiliations: ""
+  - name: "Guillermo Villar"
+    affiliations: ""
+  - name: "Mara Weber"
+    affiliations: ""
+  - name: "Matthias Roesti"
+    affiliations: ""
+  - name: "Nienke Visscher"
+    affiliations: ""
+  - name: "Olivier Caron"
+    affiliations: "Paris Dauphine - PSL"
 format:
   revealjs:
     theme: simple
